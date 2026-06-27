@@ -8,6 +8,101 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
   <style>
+  /* ===== LOGIN GATE ===== */
+  #login-gate {
+    position: fixed; inset: 0; z-index: 99999;
+    background: #000;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  #login-gate.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .lg-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 40%, rgba(0,113,227,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 70%, rgba(142,95,247,0.15) 0%, transparent 60%),
+                #000;
+  }
+  .lg-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .lg-card {
+    position: relative; z-index: 1;
+    background: rgba(28,28,30,0.85);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 48px 40px;
+    width: 100%; max-width: 420px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+    animation: lgSlideIn 0.6s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes lgSlideIn {
+    from { opacity:0; transform: translateY(30px) scale(0.96); }
+    to   { opacity:1; transform: translateY(0) scale(1); }
+  }
+  .lg-logo {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: linear-gradient(135deg, #0071E3, #8E5FF7);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; margin: 0 auto 24px;
+    box-shadow: 0 8px 24px rgba(0,113,227,0.4);
+  }
+  .lg-title {
+    color: #fff; font-size: 22px; font-weight: 700;
+    text-align: center; margin-bottom: 6px; letter-spacing: -0.5px;
+  }
+  .lg-sub {
+    color: #86868B; font-size: 14px; text-align: center; margin-bottom: 32px;
+  }
+  .lg-field { margin-bottom: 16px; }
+  .lg-field label {
+    display: block; color: #86868B; font-size: 12px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .lg-field input {
+    width: 100%; box-sizing: border-box;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 14px 16px;
+    color: #fff; font-size: 15px; font-family: 'Inter', sans-serif;
+    outline: none; transition: all 0.2s;
+  }
+  .lg-field input:focus {
+    border-color: #0071E3;
+    background: rgba(0,113,227,0.08);
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
+  }
+  .lg-btn {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, #0071E3, #0077ED);
+    border: none; border-radius: 12px;
+    color: #fff; font-size: 16px; font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer; margin-top: 8px;
+    transition: all 0.2s; letter-spacing: -0.2px;
+    box-shadow: 0 4px 16px rgba(0,113,227,0.4);
+  }
+  .lg-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,113,227,0.5); }
+  .lg-btn:active { transform: translateY(0); }
+  .lg-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .lg-err {
+    color: #E5484D; font-size: 13px; text-align: center;
+    margin-top: 12px; display: none;
+    background: rgba(229,72,77,0.1); border-radius: 8px; padding: 10px;
+    border: 1px solid rgba(229,72,77,0.2);
+  }
+  .lg-err.show { display: block; animation: shake 0.4s ease; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 60%{transform:translateX(6px)}
+  }
+  .lg-footer { color: #3A3A3C; font-size: 12px; text-align: center; margin-top: 24px; }
+  </style>
+  <style>
     /* ===== DESIGN SYSTEM: UI/UX Pro Max — Dark Mode OLED ===== */
     :root {
       --bg:      #FFFFFF;
@@ -1091,6 +1186,89 @@ function toast(msg,type){
   document.getElementById('tc').appendChild(d);
   setTimeout(function(){d.remove();},4000);
 }
+</script>
+
+<!-- ===== LOGIN GATE ===== -->
+<div id="login-gate">
+  <div class="lg-bg"></div>
+  <div class="lg-card">
+    <div class="lg-logo">🏭</div>
+    <div class="lg-title">Ombor Taqqoslagich</div>
+    <div class="lg-sub">Tizimga kirish uchun ma'lumotlarni kiriting</div>
+    <div class="lg-field">
+      <label>Foydalanuvchi nomi</label>
+      <input type="text" id="lg-user" placeholder="admin" autocomplete="username" />
+    </div>
+    <div class="lg-field">
+      <label>Parol</label>
+      <input type="password" id="lg-pass" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button class="lg-btn" id="lg-submit" onclick="lgLogin()">Kirish</button>
+    <div class="lg-err" id="lg-err">❌ Login yoki parol noto'g'ri!</div>
+    <div class="lg-footer">SmartUP vs 1C WMS · Taqqoslagich v2.6</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // SHA-256 hash funksiyasi
+  async function sha256(msg){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // Hashed credentials (admin:meros2026)
+  const VALID_HASH = 'b3e9a1c8f5d2047e6a84b3f1c9e2d5a7b8f4c1e6d9a2b5f8c3e1d4a7b2f5c8e1'; // placeholder
+  // Real hash computation at login time
+  const CORRECT_USER = 'admin';
+  const CORRECT_PASS = 'meros2026';
+
+  // Session tekshirish
+  if(sessionStorage.getItem('lg_auth') === 'ok'){
+    document.getElementById('login-gate').classList.add('hidden');
+  }
+
+  // Enter tugmasi
+  ['lg-user','lg-pass'].forEach(function(id){
+    document.getElementById(id).addEventListener('keydown', function(e){
+      if(e.key === 'Enter') lgLogin();
+    });
+  });
+
+  window.lgLogin = async function(){
+    var btn = document.getElementById('lg-submit');
+    var err = document.getElementById('lg-err');
+    var user = document.getElementById('lg-user').value.trim();
+    var pass = document.getElementById('lg-pass').value;
+
+    btn.disabled = true;
+    btn.textContent = 'Tekshirilmoqda...';
+    err.classList.remove('show');
+
+    try {
+      var userHash = await sha256(user);
+      var passHash = await sha256(pass);
+      var correctUserHash = await sha256(CORRECT_USER);
+      var correctPassHash = await sha256(CORRECT_PASS);
+
+      if(userHash === correctUserHash && passHash === correctPassHash){
+        sessionStorage.setItem('lg_auth','ok');
+        var gate = document.getElementById('login-gate');
+        gate.style.opacity = '0';
+        setTimeout(function(){ gate.classList.add('hidden'); }, 500);
+      } else {
+        err.classList.add('show');
+        document.getElementById('lg-pass').value = '';
+        document.getElementById('lg-pass').focus();
+      }
+    } catch(e){
+      err.classList.add('show');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Kirish';
+  };
+})();
 </script>
 </body>
 </html>
